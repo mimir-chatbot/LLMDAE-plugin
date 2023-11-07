@@ -28,10 +28,7 @@ def settings_schema():
 def before_rabbithole_splits_text(doc: Document, cat) -> Document:
 
     settings = cat.mad_hatter.plugins["LLMDAE-plugin"].load_settings()
-    log.error(settings)
     prompt = f"{settings['query_llm_prefix']}\n from source(${doc[0].metadata['source']}) \n text: {doc[0].page_content}"
-
-    log.error(prompt)
 
     if settings['use_default_llm']:
         result = cat.llm(prompt)
@@ -58,7 +55,7 @@ def before_rabbithole_splits_text(doc: Document, cat) -> Document:
         if isinstance(llm, langchain.chat_models.base.BaseChatModel):
             result = llm.call_as_llm(prompt, callbacks=[])
 
-        log.error(result)
+
     doc[0].page_content = result
 
     return doc
